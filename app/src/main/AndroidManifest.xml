@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!-- Pleos Vehicle SDK: 신호 조회 -->
+    <uses-permission android:name="pleos.car.permission.CAR_DRIVE" />
+    <uses-permission android:name="pleos.car.permission.CAR_POWERTRAIN" />
+    <uses-permission android:name="pleos.car.permission.CAR_SPEED" />
+    <uses-permission android:name="pleos.car.permission.CAR_SEATS" />
+    <uses-permission android:name="pleos.car.permission.CAR_LIGHTS" />
+    <uses-permission android:name="pleos.car.permission.CAR_CLIMATE" />
+    <uses-permission android:name="pleos.car.permission.CAR_WINDOWS" />
+    <uses-permission android:name="pleos.car.permission.READ_CAR_STEERING" />
+
+    <!-- Pleos Vehicle SDK: 빛 큐·공조·창문 제어 -->
+    <uses-permission android:name="pleos.car.permission.CONTROL_CAR_LIGHTS" />
+    <uses-permission android:name="pleos.car.permission.CONTROL_CAR_CLIMATE" />
+    <uses-permission android:name="pleos.car.permission.CONTROL_CAR_WINDOWS" />
+
+    <!-- Pleos NaviHelper: 회전 안내·주의 구간·현재 위치 -->
+    <uses-permission android:name="pleos.car.permission.NAVI_ROUTE" />
+    <uses-permission android:name="pleos.car.permission.NAVI_ROUTE_SEARCH" />
+
+    <!-- 화면 없이 계속 살피는 포그라운드 서비스와 상태 알림(증상 버튼·도착 리포트) -->
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_SPECIAL_USE" />
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+
+    <!-- Pleos TTS -->
+    <uses-permission android:name="pleos.car.permission.TTS_SERVICE" />
+
+    <!-- Android TextToSpeech 대체 경로: TTS 엔진 조회 -->
+    <queries>
+        <intent>
+            <action android:name="android.intent.action.TTS_SERVICE" />
+        </intent>
+        <!-- 도착 리포트를 닫은 뒤 내비게이션(기본 지도 앱)으로 돌아가기 -->
+        <intent>
+            <action android:name="android.intent.action.MAIN" />
+            <category android:name="android.intent.category.APP_MAPS" />
+        </intent>
+    </queries>
+
+    <application
+        android:allowBackup="false"
+        android:icon="@mipmap/ic_launcher"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:label="@string/app_name"
+        android:supportsRtl="true"
+        android:theme="@style/Theme.MotionZero">
+
+        <!-- 주행 규제(CarUxRestrictions) 구독. 차량이 아닌 기기에서도 설치되도록 required=false -->
+        <uses-library
+            android:name="android.car"
+            android:required="false" />
+
+        <activity
+            android:name=".MainActivity"
+            android:configChanges="orientation|screenSize|smallestScreenSize|screenLayout|density|keyboard|keyboardHidden|navigation|uiMode"
+            android:exported="true"
+            android:resizeableActivity="true">
+            <!-- 주행 중 사용(Distraction Optimization) 선언: 동승자 케어는 주행 중에 동작해야 한다.
+                 주행 중 화면은 정적 카드 1장이고, CarUxRestrictions에 따라 설정 조작을 잠근다. -->
+            <meta-data
+                android:name="distractionOptimized"
+                android:value="true" />
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+        <!-- 도착 후 트립 리포트: landscape 로 지정해 앱 영역 전체(창 2개)를 쓴다.
+             옆 창에서 열리면 Pleos 홈 화면이 "창을 넓혀 달라"는 안내를 띄우고, 한 번 누르면 넓어진다(에뮬레이터 v2.1.0 실측).
+             주행 중에는 쓰지 않으므로 distractionOptimized 를 선언하지 않는다. -->
+        <activity
+            android:name=".TripReportActivity"
+            android:configChanges="orientation|screenSize|smallestScreenSize|screenLayout|density|keyboard|keyboardHidden|navigation|uiMode"
+            android:exported="false"
+            android:launchMode="singleTop"
+            android:resizeableActivity="true"
+            android:screenOrientation="landscape" />
+
+        <!-- 주행 중 내비가 앱 영역 전체를 쓰는 동안 화면 없이 빛·소리 예고를 계속한다. -->
+        <service
+            android:name=".MotionZeroService"
+            android:exported="false"
+            android:foregroundServiceType="specialUse">
+            <property
+                android:name="android.app.PROPERTY_SPECIAL_USE_FGS_SUBTYPE"
+                android:value="In-vehicle passenger motion sickness care: predicts upcoming turns and braking from vehicle and navigation signals and cues passengers with sound and ambient light while the navigation app is in the foreground." />
+        </service>
+
+    </application>
+
+</manifest>

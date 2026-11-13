@@ -1,0 +1,14 @@
+# Gradle / Android build outputs
+build/
+.gradle/
+.kotlin/
+local.properties
+captures/
+*.apk.idsig
+
+# IDE
+.idea/
+*.iml
+.DS_Store
+
+# keystore/release.jks 와 apk/*.apk 는 제출물이므로 추적한다.

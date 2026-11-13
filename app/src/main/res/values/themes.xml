@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- 첫 화면이 그려지기 전 창 배경. 주간에는 밝게 두어 어두운 화면이 잠깐 보이지 않게 한다(ui/Theme.kt background 와 같은 색). -->
+    <style name="Theme.MotionZero" parent="@android:style/Theme.Material.Light.NoActionBar">
+        <item name="android:windowBackground">@color/window_background</item>
+    </style>
+</resources>

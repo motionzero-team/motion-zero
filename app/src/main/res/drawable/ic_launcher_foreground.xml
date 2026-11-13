@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- 멀미 제로 아이콘: 앞으로 굽은 길(곡선)과 미리 알리는 신호점. 108dp 캔버스, 중앙 72dp 안에 그린다. -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+    <!-- 굽은 길 -->
+    <path
+        android:pathData="M34,76 C34,56 74,60 74,40"
+        android:strokeWidth="9"
+        android:strokeColor="#4FC3F7"
+        android:strokeLineCap="round"
+        android:fillColor="#00000000" />
+    <!-- 예고 신호(빛 큐) -->
+    <path
+        android:fillColor="#FFC400"
+        android:pathData="M74,30 m-7,0 a7,7 0 1,0 14,0 a7,7 0 1,0 -14,0" />
+    <!-- 출발점 -->
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M34,80 m-5,0 a5,5 0 1,0 10,0 a5,5 0 1,0 -10,0" />
+</vector>
